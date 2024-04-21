@@ -1,34 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useEffect } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
 
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  async function fetchEvents() {
+    const response = await fetch(`http://127.0.0.1:8000/fetch-events/hello`)
+    const data = await response.json()
+    // generateSchedule(data)
+  }
+
+  async function generateSchedule(data) {
+    const response = await fetch(`http://127.0.0.1:8000/generate-schedule`, {
+      method: 'POST',
+      headers: {"Content-Type": 'application/json'},
+      body: JSON.stringify({"events": data})
+    })
+    if (!response.ok){
+      console.log("Error", response.statusText)
+    }
+    const newData = await response.json()
+    console.log(newData)
+  }
+
+  async function fetchMap() {
+    const response = await fetch (`http://127.0.0.1:8000/fetch-map/6624502ebdbe5e73293ba905`) // test map
+    const data = await response.json()
+  }
+  
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div>Hello</div>
     </>
+      
   )
 }
 
