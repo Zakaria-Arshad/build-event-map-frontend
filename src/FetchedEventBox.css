@@ -1,0 +1,7 @@
+.eventBox {
+    width: 150px;  
+    height: 150px;  
+    border: 2px solid black;
+    margin: 15px; 
+    padding: 10px;
+}

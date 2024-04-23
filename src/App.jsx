@@ -1,7 +1,8 @@
 import './App.css'
 import { useEffect, useState } from 'react';
-import {APIProvider, Map, Marker} from '@vis.gl/react-google-maps';
+import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 import { useEvents } from './EventContext'
+import FetchedEventBox from './FetchedEventBox'
 
 function App() {
   const { eventInfo, addEvent } = useEvents()
@@ -29,11 +30,9 @@ function App() {
     const response = await fetch(`http://127.0.0.1:8000/fetch-events/${searchValue}`)
     const data = await response.json()
     setFetchedEvents(data)
-    addEvent(data[0])
-    // generateSchedule(data)
   }
 
-  async function generateSchedule(data) {
+  const generateSchedule = async (data) => {
     const response = await fetch(`http://127.0.0.1:8000/generate-schedule`, {
       method: 'POST',
       headers: {"Content-Type": 'application/json'},
@@ -53,38 +52,42 @@ function App() {
   
   return (
     <>
-    <div className="map-container">
-      <APIProvider apiKey={apiKey}>
-        <Map
-          style={{width: '75vw', height: '75vh'}} // change this to 100%, 100% later and change 
-          defaultCenter={{lat: 39.8097343, lng: -98.5556199}}
-          defaultZoom={4.5}
-          gestureHandling={'greedy'}
-          disableDefaultUI={true}
-        >
-        {eventInfo.map(event => (
-          <Marker
-            key={event.datetime_utc}
-            position={{
-              lat: event['venue.location'].lat,
-              lng: event['venue.location'].lon 
-            }}
-          />
-          ))}
-        </Map>
-      </APIProvider>
-    </div>
-    <form onSubmit={handleSubmit}>
-      <label>
-        Search for events: 
-        <input name="searchBar" onChange={handleSearchChange}/>
-      </label>
-      <button>FETCH EVENTS</button>
-    </form>
-    <div>
-      {fetchedEvents.map((element, index) => (
-        <p key={index}>{element.title}</p>
-      ))}
+    <div className="app-container">
+      <div className="map-container">
+        <APIProvider apiKey={apiKey}>
+          <Map
+            style={{width: '65vw', height: '80vh'}}
+            defaultCenter={{lat: 39.8097343, lng: -95.5556199}}
+            defaultZoom={4.5}
+            gestureHandling={'greedy'}
+            disableDefaultUI={true}
+          >
+          {eventInfo.map(event => (
+            <Marker
+              key={event.datetime_utc}
+              position={{
+                lat: event['venue.location'].lat,
+                lng: event['venue.location'].lon 
+              }}
+            />
+            ))}
+          </Map>
+        </APIProvider>
+
+        <form onSubmit={handleSubmit}>
+          <label>
+            Search for events: 
+            <input name="searchBar" onChange={handleSearchChange}/>
+          </label>
+          <button>FETCH EVENTS</button>
+        </form>
+      </div>
+    
+      <div className="fetched-events-container">
+        {fetchedEvents.map((element, index) => (
+          <FetchedEventBox key={index} event={element}></FetchedEventBox>
+        ))}
+      </div>
     </div>
     </>
   )
