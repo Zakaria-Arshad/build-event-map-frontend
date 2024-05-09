@@ -1,13 +1,14 @@
 import './App.css'
 import { useEffect, useState } from 'react';
-import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
+import { APIProvider, Map, Marker, InfoWindow } from '@vis.gl/react-google-maps';
 import { useEvents } from './EventContext'
 import FetchedEventBox from './FetchedEventBox'
 
 function App() {
-  const { eventInfo, addEvent } = useEvents()
+  const { eventInfo, addEvent, deleteEvent } = useEvents() // eventInfo = all events, addEvent = function
   const [fetchedEvents, setFetchedEvents] = useState([])
   const [searchValue, setSearchValue] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
@@ -25,6 +26,19 @@ function App() {
     }
     setSearchValue("")
   }
+
+  const handleMarkerClick = (event, eventData) => {
+    setSelectedEvent(eventData);
+  };
+
+  const deleteMarker = () => {
+    deleteEvent(selectedEvent)
+    handleInfoWindowClose()
+  }
+
+  const handleInfoWindowClose = () => {
+    setSelectedEvent(null);
+  };
 
   const fetchEvents = async() => {
     const response = await fetch(`http://127.0.0.1:8000/fetch-events/${searchValue}`)
@@ -54,29 +68,46 @@ function App() {
     <>
     <div className="app-container">
       <div className="map-container">
-        <APIProvider apiKey={apiKey}>
-          <Map
-            style={{width: '65vw', height: '80vh'}}
-            defaultCenter={{lat: 39.8097343, lng: -95.5556199}}
-            defaultZoom={4.5}
-            gestureHandling={'greedy'}
-            disableDefaultUI={true}
+      <APIProvider apiKey={apiKey}>
+      <Map
+        style={{ width: '65vw', height: '80vh' }}
+        defaultCenter={{ lat: 39.8097343, lng: -95.5556199 }}
+        defaultZoom={4.5}
+        gestureHandling="greedy"
+        disableDefaultUI={true}
+      >
+        {eventInfo.map(event => (
+          <Marker
+            key={event.datetime_utc}
+            position={{
+              lat: event['venue.location'].lat,
+              lng: event['venue.location'].lon
+            }}
+            onClick={(e) => handleMarkerClick(e, event)}
+          />
+        ))}
+        {selectedEvent && (
+          <InfoWindow
+            position={{
+              lat: selectedEvent['venue.location'].lat,
+              lng: selectedEvent['venue.location'].lon
+            }}
+            onCloseClick={handleInfoWindowClose}
           >
-          {eventInfo.map(event => (
-            <Marker
-              key={event.datetime_utc}
-              position={{
-                lat: event['venue.location'].lat,
-                lng: event['venue.location'].lon 
-              }}
-            />
-            ))}
-          </Map>
-        </APIProvider>
+            <div>
+              <h2>{selectedEvent.title}</h2>
+              <p>Date: {new Date(selectedEvent.datetime_utc).toLocaleString()}</p>
+              <p>Location: {selectedEvent['venue.name']}</p>
+              <button onClick={() => deleteMarker()}>Delete Event</button>
+            </div>
+          </InfoWindow>
+        )}
+      </Map>
+      </APIProvider>
 
-        <form onSubmit={handleSubmit}>
-          <label>
-            Search for events: 
+      <form onSubmit={handleSubmit}>
+        <label>
+          Search for events: 
             <input name="searchBar" onChange={handleSearchChange}/>
           </label>
           <button>FETCH EVENTS</button>

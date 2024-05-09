@@ -13,8 +13,13 @@ export const EventProvider = ({ children }) => {
         }
     }
 
+    const deleteEvent = ( eventToDelete ) => {
+        const newEvents = eventInfo.filter((event) => event.datetime_utc != eventToDelete.datetime_utc)
+        setEventInfo(newEvents)
+    }
+
     return (
-        <EventContext.Provider value={{eventInfo, addEvent}}>
+        <EventContext.Provider value={{eventInfo, addEvent, deleteEvent}}>
             {children}
         </EventContext.Provider>
     )
