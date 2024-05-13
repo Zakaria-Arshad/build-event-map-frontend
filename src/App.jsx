@@ -5,19 +5,23 @@ import { useEvents } from './EventContext'
 import FetchedEventBox from './FetchedEventBox'
 
 function App() {
-  const { allEvents, addEvent, deleteEvent } = useEvents() // eventInfo = all events, addEvent = function
+  const { allEvents, addEvent, addAllEvents, deleteEvent } = useEvents() // eventInfo = all events, addEvent = function
   const [fetchedEvents, setFetchedEvents] = useState([])
   const [searchValue, setSearchValue] = useState("");
+  const [fetchMapValue, setFetchMapValue] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
   useEffect(() => {
-    console.log(allEvents)
   }, [allEvents, fetchedEvents]);
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value); // update state with the input's new value
   };
+
+  const handleFetchMapChange = (event) => {
+    setFetchMapValue(event.target.value)
+  }
 
   const handleSubmit = async(event) => {
     event.preventDefault()
@@ -43,6 +47,7 @@ function App() {
   const fetchEvents = async() => {
     const response = await fetch(`http://127.0.0.1:8000/fetch-events/${searchValue}`)
     const data = await response.json()
+    console.log("fetchedEvents", data)
     setFetchedEvents(data)
   }
 
@@ -60,9 +65,12 @@ function App() {
     console.log(newData)
   }
 
-  const fetchMap = async () => {
-    const response = await fetch (`http://127.0.0.1:8000/fetch-map/6624502ebdbe5e73293ba905`) // test map
+  const fetchMap = async (event) => {
+    event.preventDefault()
+    const response = await fetch (`http://127.0.0.1:8000/fetch-map/${fetchMapValue}`) // test map
     const data = await response.json()
+    console.log("fetched map events", data.events)
+    addAllEvents(data.events)
   }
 
   const submitMap = async() => {
@@ -94,8 +102,8 @@ function App() {
               <Marker
                 key={event.datetime_utc}
                 position={{
-                  lat: event['venue.location'].lat,
-                  lng: event['venue.location'].lon
+                  lat: event['venue_location'].lat,
+                  lng: event['venue_location'].lon
                 }}
                 onClick={(e) => handleMarkerClick(e, event)}
               />
@@ -103,15 +111,15 @@ function App() {
             {selectedEvent && (
               <InfoWindow
                 position={{
-                  lat: selectedEvent['venue.location'].lat,
-                  lng: selectedEvent['venue.location'].lon
+                  lat: selectedEvent['venue_location'].lat,
+                  lng: selectedEvent['venue_location'].lon
                 }}
                 onCloseClick={handleInfoWindowClose}
               >
                 <div>
                   <h2>{selectedEvent.title}</h2>
                   <p>Date: {new Date(selectedEvent.datetime_utc).toLocaleString()}</p>
-                  <p>Location: {selectedEvent['venue.name']}</p>
+                  <p>Location: {selectedEvent['venue_name']}</p>
                   <button onClick={() => deleteMarker()}>Delete Event</button>
                 </div>
               </InfoWindow>
@@ -125,6 +133,14 @@ function App() {
               <input className="input-bar" onChange={handleSearchChange}/>
           </label>
           <button className="fetch-button">FETCH EVENTS</button>
+        </form>
+
+        <form onSubmit={fetchMap} className="fetch-map">
+          <label>
+            Fetch Map:
+              <input className="input-bar" onChange={handleFetchMapChange}/>
+          </label>
+          <button className="fetch-button">FETCH MAP</button>
         </form>
 
         <button onClick={submitMap}>Submit Map</button>
