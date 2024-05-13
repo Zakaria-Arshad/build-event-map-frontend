@@ -18,8 +18,13 @@
     max-width: 100vw;
 }
 
-.search-bar {
+.map-inputs-container {
+    display: flex;
     margin-top: 10px;
+}
+
+.fetch-button {
+    margin-right: 10px;
 }
 
 .input-bar {

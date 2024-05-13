@@ -126,7 +126,7 @@ function App() {
             )}
           </Map>
         </APIProvider>
-
+      <div className="map-inputs-container">
         <form onSubmit={handleSubmit} className="search-bar">
           <label>
             Search for events:
@@ -144,6 +144,7 @@ function App() {
         </form>
 
         <button onClick={submitMap}>Submit Map</button>
+      </div>
 
       </div>
       <div className="fetched-events-container">
