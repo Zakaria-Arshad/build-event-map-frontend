@@ -7,7 +7,9 @@ import FetchedEventBox from './FetchedEventBox'
 function App() {
   const { allEvents, addEvent, addAllEvents, deleteEvent } = useEvents() // eventInfo = all events, addEvent = function
   const [fetchedEvents, setFetchedEvents] = useState([])
+  const [currentMapId, setCurrentMapId] = useState("");
   const [searchValue, setSearchValue] = useState("");
+  const [generatedSchedule, setGeneratedSchedule] = useState("");
   const [fetchMapValue, setFetchMapValue] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -51,11 +53,12 @@ function App() {
     setFetchedEvents(data)
   }
 
-  const generateSchedule = async (data) => {
+  const generateSchedule = async () => {
+    if (allEvents.length !== 0) {
     const response = await fetch(`http://127.0.0.1:8000/generate-schedule`, {
       method: 'POST',
       headers: {"Content-Type": 'application/json'},
-      body: JSON.stringify({"events": data})
+      body: JSON.stringify({"events": allEvents})
     })
 
     if (!response.ok){
@@ -63,6 +66,10 @@ function App() {
     }
     const newData = await response.json()
     console.log(newData)
+    setGeneratedSchedule(newData)
+    } else {
+      return "No events to be scheduled"
+    }
   }
 
   const fetchMap = async (event) => {
@@ -82,6 +89,7 @@ function App() {
       })
       const insertedIdObject = await response.json()
       console.log(insertedIdObject.inserted_id)
+      setCurrentMapId(insertedIdObject.inserted_id);
     }
   }
   
@@ -92,7 +100,7 @@ function App() {
       <div className="map-container">
         <APIProvider apiKey={apiKey}>
           <Map
-            style={{ width: '65vw', height: '80vh' }}
+            style={{ width: '65vw', height: '75vh' }}
             defaultCenter={{ lat: 39.8097343, lng: -95.5556199 }}
             defaultZoom={4.5}
             gestureHandling="greedy"
@@ -145,6 +153,10 @@ function App() {
 
         <button onClick={submitMap}>Submit Map</button>
       </div>
+      <p>Current Map ID: {currentMapId}</p>
+      <button onClick={generateSchedule}>Generate Schedule</button>
+      <p>{generatedSchedule}</p>
+
 
       </div>
       <div className="fetched-events-container">
