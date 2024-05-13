@@ -2,16 +2,36 @@
 .app-container {
     display: flex;
     flex-direction: row;
-    max-height: 750px;
+    max-height: 100vh;
 }
 
 .map-container {
     display: flex;
     flex-direction: column;
+    margin-bottom: 25px;
 }
 
 .fetched-events-container {
     display: flex;
-    flex-direction: column;
-    flex-flow: column wrap;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 100vw;
 }
+
+.search-bar {
+    margin-top: 10px;
+}
+
+.input-bar {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+
+    .fetched-events-container {
+        flex-direction: column;
+        flex: 1 1 100%; /* Each box takes full width on small screens */
+    }
+}
+

@@ -2,7 +2,7 @@ import { useEvents } from './EventContext'
 import "./FetchedEventBox.css"
 
 function FetchedEventBox( { event }) {
-    const { eventInfo, addEvent } = useEvents()
+    const { allEvents, addEvent, deleteEvent } = useEvents()
 
     return (
         <div className="eventBox">
