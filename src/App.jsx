@@ -13,6 +13,7 @@ function App() {
   const [fetchMapValue, setFetchMapValue] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const apiURL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
   }, [allEvents, fetchedEvents]);
@@ -47,7 +48,7 @@ function App() {
   };
 
   const fetchEvents = async() => {
-    const response = await fetch(`http://127.0.0.1:8000/fetch-events/${searchValue}`)
+    const response = await fetch(`${apiURL}/fetch-events/${searchValue}`)
     const data = await response.json()
     console.log("fetchedEvents", data)
     setFetchedEvents(data)
@@ -55,7 +56,7 @@ function App() {
 
   const generateSchedule = async () => {
     if (allEvents.length !== 0) {
-    const response = await fetch(`http://127.0.0.1:8000/generate-schedule`, {
+    const response = await fetch(`${apiURL}/generate-schedule`, {
       method: 'POST',
       headers: {"Content-Type": 'application/json'},
       body: JSON.stringify({"events": allEvents})
@@ -74,7 +75,7 @@ function App() {
 
   const fetchMap = async (event) => {
     event.preventDefault()
-    const response = await fetch (`http://127.0.0.1:8000/fetch-map/${fetchMapValue}`) // test map
+    const response = await fetch (`${apiURL}/fetch-map/${fetchMapValue}`) // test map
     const data = await response.json()
     console.log("fetched map events", data.events)
     addAllEvents(data.events)
@@ -82,7 +83,7 @@ function App() {
 
   const submitMap = async() => {
     if (allEvents.length !== 0) {
-      const response = await fetch(`http://127.0.0.1:8000/create-map`, {
+      const response = await fetch(`${apiURL}/create-map`, {
         method: 'POST', 
         headers: {"Content-Type": 'application/json'},
         body: JSON.stringify({"events": allEvents})
