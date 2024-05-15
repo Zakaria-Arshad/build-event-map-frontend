@@ -2,7 +2,6 @@
 .app-container {
     display: flex;
     flex-direction: row;
-    max-height: 100vh;
 }
 
 .map-container {
@@ -10,6 +9,19 @@
     flex-direction: column;
     margin-bottom: 25px;
 }
+
+.app-container, .fetched-events-container {
+    width: 100%; /* Ensures containers do not exceed the viewport width */
+    box-sizing: border-box; /* Includes padding and border in the element's width */
+}
+
+.search-bar-and-fetched-events {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;  
+}
+
 
 .fetched-events-container {
     display: flex;
@@ -20,23 +32,85 @@
 
 .map-inputs-container {
     display: flex;
-    margin-top: 10px;
 }
 
-.fetch-button {
-    margin-right: 10px;
+.submit-and-generate-container {
+    display: flex;
+    align-items: center;
 }
 
-.input-bar {
+.map-inputs-container, .submit-and-generate-container {
+    flex-wrap: wrap; /* Allow items to wrap onto the next line on narrow screens */
+}
+
+
+.s-g-text {
+    margin-right: 5px;
+}
+
+.submit-button, .generate-button {
+    height: 35px;
+    font-size: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    background: green;
+    color: white
+}
+
+.input-bar, .input-bar-2 {
     margin-left: 10px;
     margin-right: 10px;
+    font-size: 16px;
+    padding: 8px 10px; 
+    border: 2px solid #ccc; 
+    border-radius: 25px; 
+    box-sizing: border-box; 
+    margin-top: 10px; 
+    width: 100%;
+    outline: none;
+}
+
+
+.input-bar-2 {
+    width: 200px;
+}
+
+.no-fetched-events {
+    display: flex;
+    justify-content: center;  /* Center the message horizontally */
+    align-items: center;  /* Center the message vertically if needed */
+    padding: 20px;  /* Add some padding for visual comfort */
+    width: 100%
+}
+
+.no-fetched-text {
+    font-size: 20px;
 }
 
 @media (max-width: 768px) {
-
     .fetched-events-container {
         flex-direction: column;
         flex: 1 1 100%; /* Each box takes full width on small screens */
+    }
+
+    .map-inputs-container, .submit-and-generate-container {
+        flex-direction: column; 
+        align-items: stretch; 
+    }
+
+    .s-g-text, .input-bar, .input-bar-2 {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%; 
+    }
+
+    .submit-button, .generate-button {
+        width: 100%; /* Full width buttons for easier interaction */
+        margin-top: 10px; /* Add space between elements */
+    }
+
+    .already-have-a-map {
+        margin-top: 10px;
     }
 }
 

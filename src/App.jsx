@@ -96,14 +96,15 @@ function App() {
   
   return (
     <>
-    <h1>Build your Event Map. Plan your journey with AI.</h1>
+    <h1>Build your Event Map. </h1>
+    <h3>Plan your journey with AI.</h3>
     <div className="app-container">
       <div className="map-container">
         <APIProvider apiKey={apiKey}>
           <Map
-            style={{ width: '65vw', height: '75vh' }}
+            style={{ width: '55vw', height: '60vh' }}
             defaultCenter={{ lat: 39.8097343, lng: -95.5556199 }}
-            defaultZoom={4.5}
+            defaultZoom={4}
             gestureHandling="greedy"
             disableDefaultUI={true}
           >
@@ -136,35 +137,36 @@ function App() {
           </Map>
         </APIProvider>
       <div className="map-inputs-container">
-        <form onSubmit={handleSubmit} className="search-bar">
-          <label>
-            Search for events:
-              <input className="input-bar" onChange={handleSearchChange}/>
-          </label>
-          <button className="fetch-button">FETCH EVENTS</button>
-        </form>
-
         <form onSubmit={fetchMap} className="fetch-map">
-          <label>
-            Fetch Map:
-              <input className="input-bar" onChange={handleFetchMapChange}/>
+          <label className="already-have-a-map">
+            Already have a map?:
+              <input className="input-bar-2" placeholder="Fetch Map with ID" onChange={handleFetchMapChange}/>
           </label>
-          <button className="fetch-button">FETCH MAP</button>
         </form>
-
-        <button onClick={submitMap}>Submit Map</button>
       </div>
       <p>Current Map ID: {currentMapId}</p>
-      <button onClick={generateSchedule}>Generate Schedule</button>
+      <div className="submit-and-generate-container">
+        <p className="s-g-text">Ready to submit your map?</p>
+        <button className="submit-button" onClick={submitMap}>Submit Map</button>
+        
+      </div>
+      <div className="submit-and-generate-container">
+      <p className="s-g-text">Generate your schedule, with AI: </p>
+      <button className="generate-button" onClick={generateSchedule}>Generate Schedule</button>
+      </div>
       <p>{generatedSchedule}</p>
 
-
       </div>
-      <div className="fetched-events-container">
-        {fetchedEvents.length === 0 && <p>No events fetched...</p>}
-        {fetchedEvents.map((element, index) => (
-          <FetchedEventBox key={index} event={element}></FetchedEventBox>
-        ))}
+      <div className="search-bar-and-fetched-events">
+        <form onSubmit={handleSubmit} className="search-bar">
+            <input className="input-bar" placeholder="Enter search here..." onChange={handleSearchChange}/>
+        </form>
+        <div className="fetched-events-container">
+          {fetchedEvents.length === 0 && <div className="no-fetched-events"><p className="no-fetched-text">No events found or fetched. Enter a search and press "enter"!</p></div>}
+          {fetchedEvents.map((element, index) => (
+            <FetchedEventBox key={index} event={element}></FetchedEventBox>
+          ))}
+        </div>
       </div>
     </div>
     </>

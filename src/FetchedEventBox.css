@@ -1,6 +1,22 @@
 .eventBox {
-    width: 150px;  
+    display: flex;        /* Enables flexbox */
+    flex-direction: column; /* Stacks children vertically */
+    align-items: center;
+    justify-content: space-between; /* Aligns children to justify the space between them */
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    text-align: center;
+    max-height: auto;
     border: 2px solid black;
-    margin: 15px; 
+    margin: 5px; 
     padding: 10px;
+}
+
+.add-to-map-button {
+    max-width: 100px;
+    border-radius: 10px;
+    padding: 5px;
+    background: green;
+    color: white
+
 }

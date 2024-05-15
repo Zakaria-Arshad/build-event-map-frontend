@@ -6,9 +6,11 @@ function FetchedEventBox( { event }) {
 
     return (
         <div className="eventBox">
-            <p>{event.title}</p>
-            <p>{event["venue_name"]}</p>
-            <button onClick={() => addEvent(event)}>Add to map</button>
+            <div className="content">
+                <strong>{event.title}</strong>
+                <p>{event["venue_name"]}</p>
+            </div>
+            <button className="add-to-map-button" onClick={() => addEvent(event)}>Add to map</button>
         </div>
 
     )
