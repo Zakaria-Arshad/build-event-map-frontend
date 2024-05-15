@@ -7,7 +7,6 @@
 .map-container {
     display: flex;
     flex-direction: column;
-    margin-bottom: 25px;
 }
 
 .app-container, .fetched-events-container {
@@ -90,7 +89,6 @@
 @media (max-width: 768px) {
     .fetched-events-container {
         flex-direction: column;
-        flex: 1 1 100%; /* Each box takes full width on small screens */
     }
 
     .map-inputs-container, .submit-and-generate-container {
@@ -111,6 +109,9 @@
 
     .already-have-a-map {
         margin-top: 10px;
+    }
+    .no-fetched-text {
+        font-size: 10px;
     }
 }
 

@@ -64,21 +64,29 @@ function App() {
 
     if (!response.ok){
       console.log("Error", response.statusText)
-    }
+      setGeneratedSchedule("An error occured. Please try again shortly.")
+    } else {
     const newData = await response.json()
     console.log(newData)
     setGeneratedSchedule(newData)
+    }
     } else {
-      return "No events to be scheduled"
+       setGeneratedSchedule("No events to be scheduled")
     }
   }
 
   const fetchMap = async (event) => {
     event.preventDefault()
     const response = await fetch (`${apiURL}/fetch-map/${fetchMapValue}`) // test map
-    const data = await response.json()
-    console.log("fetched map events", data.events)
-    addAllEvents(data.events)
+    console.log(response, response.ok)
+    if (response.ok) {
+      const data = await response.json()
+      if (data.events !== undefined) {
+      console.log("fetched map events", data.events)
+      addAllEvents(data.events)
+      }
+    }
+    
   }
 
   const submitMap = async() => {
@@ -102,7 +110,7 @@ function App() {
       <div className="map-container">
         <APIProvider apiKey={apiKey}>
           <Map
-            style={{ width: '55vw', height: '60vh' }}
+            style={{ width: '55vw', height: '50vh' }}
             defaultCenter={{ lat: 39.8097343, lng: -95.5556199 }}
             defaultZoom={4}
             gestureHandling="greedy"
@@ -154,7 +162,7 @@ function App() {
       <p className="s-g-text">Generate your schedule, with AI: </p>
       <button className="generate-button" onClick={generateSchedule}>Generate Schedule</button>
       </div>
-      <p>{generatedSchedule}</p>
+      <pre>{generatedSchedule}</pre>
 
       </div>
       <div className="search-bar-and-fetched-events">
