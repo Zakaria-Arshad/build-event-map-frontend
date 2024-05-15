@@ -162,7 +162,7 @@ function App() {
       <p className="s-g-text">Generate your schedule, with AI: </p>
       <button className="generate-button" onClick={generateSchedule}>Generate Schedule</button>
       </div>
-      <pre>{generatedSchedule}</pre>
+      <pre className="pre-schedule">{generatedSchedule}</pre>
 
       </div>
       <div className="search-bar-and-fetched-events">

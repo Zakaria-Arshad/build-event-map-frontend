@@ -86,6 +86,11 @@
     font-size: 20px;
 }
 
+.pre-schedule {
+    max-width: 50%;
+    overflow-x: auto; 
+}
+
 @media (max-width: 768px) {
     .fetched-events-container {
         flex-direction: column;
