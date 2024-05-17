@@ -10,6 +10,7 @@ function App() {
   const [currentMapId, setCurrentMapId] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [generatedSchedule, setGeneratedSchedule] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // isLoading for fetching events
   const [fetchMapValue, setFetchMapValue] = useState("");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -47,12 +48,19 @@ function App() {
     setSelectedEvent(null);
   };
 
-  const fetchEvents = async() => {
-    const response = await fetch(`${apiURL}/fetch-events/${searchValue}`)
-    const data = await response.json()
-    console.log("fetchedEvents", data)
-    setFetchedEvents(data)
-  }
+  const fetchEvents = async () => {
+    setIsLoading(true);  // Start loading
+    try {
+        const response = await fetch(`${apiURL}/fetch-events/${searchValue}`);
+        const data = await response.json();
+        console.log("fetchedEvents", data);
+        setFetchedEvents(data);
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+    } finally {
+        setIsLoading(false);  // Stop loading
+    }
+};
 
   const generateSchedule = async () => {
     if (allEvents.length !== 0) {
@@ -150,6 +158,7 @@ function App() {
             Already have a map?:
               <input className="input-bar-2" placeholder="Fetch Map with ID" onChange={handleFetchMapChange}/>
           </label>
+          <button className="fetch-map-button" onClick={fetchMap}>Fetch Map</button>
         </form>
       </div>
       <p>Current Map ID: {currentMapId}</p>
@@ -171,8 +180,12 @@ function App() {
         </form>
         <div className="fetched-events-container">
           {fetchedEvents.length === 0 && <div className="no-fetched-events"><p className="no-fetched-text">No events found or fetched. Enter a search and press "enter"!</p></div>}
+          {isLoading && <div className="no-fetched-events"> <p className="no-fetched-text">Fetching... </p></div>}
           {fetchedEvents.map((element, index) => (
-            <FetchedEventBox key={index} event={element}></FetchedEventBox>
+            <FetchedEventBox 
+              key={index} 
+              event={element}>
+            </FetchedEventBox>
           ))}
         </div>
       </div>

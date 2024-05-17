@@ -18,5 +18,12 @@
     padding: 5px;
     background: green;
     color: white
+}
 
+.add-to-map-button:hover {
+    background-color: #1d541f; 
+}
+
+.add-to-map-button:active {
+    background-color: #0e440f; 
 }

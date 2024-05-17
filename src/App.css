@@ -47,13 +47,22 @@
     margin-right: 5px;
 }
 
-.submit-button, .generate-button {
+.submit-button, .generate-button, .fetch-map-button {
     height: 35px;
     font-size: 10px;
     border-radius: 5px;
     padding: 5px;
     background: green;
+    cursor: pointer;
     color: white
+}
+
+.submit-button:hover, .generate-button:hover, .fetch-map-button:hover {
+    background-color: #1d541f; 
+}
+
+.submit-button:active, .generate-button:active, .fetch-map-button:active { /* on click */
+    background-color: #0e440f; 
 }
 
 .input-bar, .input-bar-2 {
@@ -107,7 +116,7 @@
         width: 100%; 
     }
 
-    .submit-button, .generate-button {
+    .submit-button, .generate-button, .fetch-map-button {
         width: 100%; /* Full width buttons for easier interaction */
         margin-top: 10px; /* Add space between elements */
     }
