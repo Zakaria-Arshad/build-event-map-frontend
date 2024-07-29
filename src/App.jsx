@@ -1,13 +1,15 @@
 import './App.css'
 import { useEffect, useState } from 'react';
 import { APIProvider, Map, Marker, InfoWindow } from '@vis.gl/react-google-maps';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useEvents } from './EventContext'
 import FetchedEventBox from './FetchedEventBox'
 
 function App() {
   const { allEvents, addEvent, addAllEvents, deleteEvent } = useEvents() // eventInfo = all events, addEvent = function
   const [fetchedEvents, setFetchedEvents] = useState([])
-  const [currentMapId, setCurrentMapId] = useState("");
+  const [currentMapId, setCurrentMapId] = useState("No map ID");
   const [searchValue, setSearchValue] = useState("");
   const [generatedSchedule, setGeneratedSchedule] = useState("");
   const [isLoading, setIsLoading] = useState(false); // isLoading for fetching events
@@ -112,8 +114,13 @@ function App() {
   
   return (
     <>
-    <h1>Build your Event Map. </h1>
-    <h3>Plan your journey with AI.</h3>
+    <div className="front-screen-container">
+      <div className="title-container">
+        <h1 className="title">Build your Event Map. </h1>
+        <h3 className="subtitle">Plan your journey with AI.</h3>
+        <FontAwesomeIcon icon={faArrowDown} className="arrow-down" size="3x"/>
+      </div>
+    </div>
     <div className="app-container">
       <div className="map-container">
         <APIProvider apiKey={apiKey}>
@@ -152,27 +159,25 @@ function App() {
             )}
           </Map>
         </APIProvider>
+    <div className="bottom-container">
       <div className="map-inputs-container">
         <form onSubmit={fetchMap} className="fetch-map">
           <label className="already-have-a-map">
-            Already have a map?:
+            <b>Already have a map?:</b>
               <input className="input-bar-2" placeholder="Fetch Map with ID" onChange={handleFetchMapChange}/>
           </label>
           <button className="fetch-map-button" onClick={fetchMap}>Fetch Map</button>
         </form>
+        <div className="map-id">
+        <p ><b>Current Map ID: </b> {currentMapId}</p>
+        </div>
       </div>
-      <p>Current Map ID: {currentMapId}</p>
       <div className="submit-and-generate-container">
-        <p className="s-g-text">Ready to submit your map?</p>
         <button className="submit-button" onClick={submitMap}>Submit Map</button>
-        
-      </div>
-      <div className="submit-and-generate-container">
-      <p className="s-g-text">Generate your schedule, with AI: </p>
-      <button className="generate-button" onClick={generateSchedule}>Generate Schedule</button>
+        <button className="generate-button" onClick={generateSchedule}>Generate Schedule</button>
       </div>
       <pre className="pre-schedule">{generatedSchedule}</pre>
-
+      </div>
       </div>
       <div className="search-bar-and-fetched-events">
         <form onSubmit={handleSubmit} className="search-bar">

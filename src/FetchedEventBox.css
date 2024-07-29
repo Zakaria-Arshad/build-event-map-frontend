@@ -1,8 +1,8 @@
 .eventBox {
-    display: flex;        /* Enables flexbox */
-    flex-direction: column; /* Stacks children vertically */
+    display: flex;        
+    flex-direction: column; 
     align-items: center;
-    justify-content: space-between; /* Aligns children to justify the space between them */
+    justify-content: space-between; 
     background-color: #f9f9f9;
     border-radius: 10px;
     text-align: center;
@@ -10,6 +10,10 @@
     border: 2px solid black;
     margin: 5px; 
     padding: 10px;
+}
+
+.content {
+    width: 200px;
 }
 
 .add-to-map-button {
