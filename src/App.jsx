@@ -118,6 +118,7 @@ function App() {
       <div className="title-container">
         <h1 className="title">Build your Event Map. </h1>
         <h3 className="subtitle">Plan your journey with AI.</h3>
+        <h3 className="greeting">Hello, Hiring Manager :)</h3>
         <FontAwesomeIcon icon={faArrowDown} className="arrow-down" size="3x"/>
       </div>
     </div>

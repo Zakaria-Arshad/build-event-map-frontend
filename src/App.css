@@ -27,9 +27,14 @@
     opacity: 0;
 }
 
+.greeting {
+    animation: plopIn 1s ease-out 2s forwards;
+    opacity: 0;
+  }
+
 .arrow-down {
     margin-top: 30px;
-    animation: plopIn 1s ease-out 2s forwards;
+    animation: plopIn 1s ease-out 3s forwards;
     opacity: 0;
 
 
